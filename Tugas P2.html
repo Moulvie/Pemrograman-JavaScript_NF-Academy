@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas P2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 8px;
+            margin: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+        thead {
+            background-color: #f2f2f2;
+        }
+        tfoot {
+            background-color: #e0e0e0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Form Input Data Pegawai</h2>
+<form id="pegawaiForm">
+    <label>Nama: <input type="text" id="nama" required></label>
+    <label>Umur: <input type="number" id="umur" required></label>
+    <label>Jabatan:
+        <select id="jabatan" required>
+            <option value="manajer">Manajer</option>
+            <option value="asisten manajer">Asisten Manajer</option>
+            <option value="staff">Staff</option>
+        </select>
+    </label>
+    <label>Status:
+        <select id="status" required>
+            <option value="menikah">Menikah</option>
+            <option value="belum menikah">Belum Menikah</option>
+        </select>
+    </label>
+    <button type="submit">Tampilkan Data</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nama Pegawai</th>
+            <th>Umur</th>
+            <th>Jabatan</th>
+            <th>Status</th>
+            <th>Gaji Pokok</th>
+            <th>Tunjangan Jabatan</th>
+            <th>BPJS</th>
+            <th>Tunjangan Keluarga</th>
+        </tr>
+    </thead>
+    <tbody id="data-pegawai">
+        <!-- Data pegawai akan dimasukkan di sini -->
+    </tbody>
+    <tfoot id="total-gaji">
+        <!-- Total Gaji ditampilkan di sini -->
+    </tfoot>
+</table>
+
+<script>
+    document.getElementById("pegawaiForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        // Ambil data dari form
+        let nama = document.getElementById("nama").value;
+        let umur = parseInt(document.getElementById("umur").value);
+        let jabatan = document.getElementById("jabatan").value;
+        let status = document.getElementById("status").value;
+
+        // Gaji Pokok berdasarkan jabatan (if)
+        let gajiPokok = 0;
+        if (jabatan === "manajer") {
+            gajiPokok = 15000000;
+        } else if (jabatan === "asisten manajer") {
+            gajiPokok = 10000000;
+        } else if (jabatan === "staff") {
+            gajiPokok = 5000000;
+        }
+
+        // Tunjangan Jabatan 15%
+        let tunjanganJabatan = 0.15 * gajiPokok;
+
+        // BPJS 10%
+        let bpjs = 0.10 * gajiPokok;
+
+        // Tunjangan Keluarga (ternary)
+        let tunjanganKeluarga = (status === "menikah") ? 0.20 * gajiPokok : 0;
+
+        // Total Gaji
+        let totalGaji = gajiPokok + tunjanganJabatan + bpjs + tunjanganKeluarga;
+
+        // Tampilkan data di tabel
+        document.getElementById("data-pegawai").innerHTML = `
+            <tr>
+                <td>${nama}</td>
+                <td>${umur}</td>
+                <td>${jabatan}</td>
+                <td>${status}</td>
+                <td>Rp ${gajiPokok.toLocaleString()}</td>
+                <td>Rp ${tunjanganJabatan.toLocaleString()}</td>
+                <td>Rp ${bpjs.toLocaleString()}</td>
+                <td>Rp ${tunjanganKeluarga.toLocaleString()}</td>
+            </tr>
+        `;
+
+        // Tampilkan total gaji di tfoot
+        document.getElementById("total-gaji").innerHTML = `
+            <tr>
+                <td colspan="7">Total Gaji</td>
+                <td>Rp ${totalGaji.toLocaleString()}</td>
+            </tr>
+        `;
+    });
+</script>
+
+</body>
+</html>
