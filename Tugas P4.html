@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistem Manajemen Transportasi</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      background-color: #3498db;
+      color: white;
+      padding: 10px;
+      border: none;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .daftar-pelanggan {
+      margin-top: 20px;
+    }
+
+    .pelanggan-card {
+      background-color: #ecf0f1;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sistem Manajemen Transportasi</h1>
+  <div class="container">
+    <label for="nama">Nama:</label>
+    <input type="text" id="nama" placeholder="Masukkan nama">
+
+    <label for="telepon">Nomor Telepon:</label>
+    <input type="text" id="telepon" placeholder="Masukkan nomor telepon">
+
+    <label for="kendaraan">Kendaraan Disewa:</label>
+    <select id="kendaraan">
+      <option value="Mobil">Mobil</option>
+      <option value="Motor">Motor</option>
+      <option value="Truk">Truk</option>
+      <option value="Bus">Bus</option>
+    </select>
+
+    <button onclick="sewa()">Sewa Kendaraan</button>
+
+    <div class="daftar-pelanggan" id="daftarPelanggan">
+      <p class="no-data" id="noData">Belum ada pelanggan yang menyewa kendaraan.</p>
+    </div>
+  </div>
+
+  <script>
+    class Pelanggan {
+      constructor(nama, nomorTelepon, kendaraanDisewa) {
+        this.nama = nama;
+        this.nomorTelepon = nomorTelepon;
+        this.kendaraanDisewa = kendaraanDisewa;
+      }
+    }
+
+    class ManajemenTransportasi {
+      constructor() {
+        this.daftarPelanggan = [];
+      }
+
+      sewaKendaraan(nama, nomorTelepon, kendaraanDisewa) {
+        const pelangganBaru = new Pelanggan(nama, nomorTelepon, kendaraanDisewa);
+        this.daftarPelanggan.push(pelangganBaru);
+        this.tampilkanDaftarPelanggan();
+      }
+
+      tampilkanDaftarPelanggan() {
+        const container = document.getElementById('daftarPelanggan');
+        container.innerHTML = '';
+
+        if (this.daftarPelanggan.length === 0) {
+          container.innerHTML = '<p class="no-data">Belum ada pelanggan yang menyewa kendaraan.</p>';
+        } else {
+          this.daftarPelanggan.forEach((p, index) => {
+            const card = document.createElement('div');
+            card.className = 'pelanggan-card';
+            card.innerHTML = `
+              <strong>${index + 1}. ${p.nama}</strong><br>
+              Telepon: ${p.nomorTelepon}<br>
+              Kendaraan: ${p.kendaraanDisewa}
+            `;
+            container.appendChild(card);
+          });
+        }
+      }
+    }
+
+    const sistemTransportasi = new ManajemenTransportasi();
+
+    function sewa() {
+      const nama = document.getElementById('nama').value.trim();
+      const telepon = document.getElementById('telepon').value.trim();
+      const kendaraan = document.getElementById('kendaraan').value;
+
+      if (nama === '' || telepon === '') {
+        alert('Nama dan nomor telepon harus diisi!');
+        return;
+      }
+
+      sistemTransportasi.sewaKendaraan(nama, telepon, kendaraan);
+
+      // Reset form
+      document.getElementById('nama').value = '';
+      document.getElementById('telepon').value = '';
+      document.getElementById('kendaraan').selectedIndex = 0;
+    }
+  </script>
+</body>
+</html>
