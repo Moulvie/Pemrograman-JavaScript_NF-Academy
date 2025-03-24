@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Manajemen Produk Toko Online</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .product-form input {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        .product-form button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .product-form button:hover {
+            background-color: #219150;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #ecf0f1;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manajemen Produk Toko Online</h1>
+    <div class="container">
+        <form class="product-form" id="productForm">
+            <input type="text" id="name" placeholder="Nama Produk" required />
+            <input type="number" id="price" placeholder="Harga Produk" required />
+            <button type="submit">Tambah Produk</button>
+        </form>
+        <h2>Daftar Produk</h2>
+        <ul id="productList"></ul>
+    </div>
+
+    <script>
+        // Data awal produk
+        let products = [
+            { name: 'Laptop', price: 8000 },
+            { name: 'Mouse', price: 150 },
+            { name: 'Keyboard', price: 300 },
+            { name: 'Monitor', price: 2000 },
+            { name: 'Printer', price: 1200 },
+        ];
+
+        const productList = document.getElementById('productList');
+        const productForm = document.getElementById('productForm');
+        const nameInput = document.getElementById('name');
+        const priceInput = document.getElementById('price');
+
+        // Tampilkan semua produk
+        function displayProducts(...items) {
+            productList.innerHTML = '';
+            items.forEach(({ name, price }, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${index + 1}. ${name} - Rp ${price}</span>
+                    <button class="delete-btn" data-index="${index}">Hapus</button>
+                `;
+                productList.appendChild(li);
+            });
+        }
+
+        // Tambah produk
+        productForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = nameInput.value;
+            const price = parseInt(priceInput.value);
+
+            // Gunakan spread operator untuk menambah produk
+            products = [...products, { name, price }];
+            displayProducts(...products);
+
+            nameInput.value = '';
+            priceInput.value = '';
+        });
+
+        // Hapus produk dengan event delegation
+        productList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-btn')) {
+                const index = e.target.getAttribute('data-index');
+                // Gunakan rest parameter untuk filter
+                products = products.filter((_, i) => i != index);
+                displayProducts(...products);
+            }
+        });
+
+        // Tampilkan produk saat halaman dimuat
+        displayProducts(...products);
+    </script>
+</body>
+</html>
