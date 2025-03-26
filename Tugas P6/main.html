@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Advanced</title>
+</head>
+<body>
+    <h1>Daftar Pengguna</h1>
+    <ul id="userList"></ul>
+
+    <script type="module">
+        import users from "./data.mjs";
+        import { index, store, destroy } from "./controller.mjs";
+
+        const renderUsers = () => {
+            const userList = document.getElementById("userList");
+            userList.innerHTML = ""; // Kosongkan daftar sebelum menampilkan ulang
+
+            users.map((user, index) => {
+                const li = document.createElement("li");
+                li.textContent = `${index + 1}. ${user.nama}, ${user.umur} tahun, ${user.alamat}, ${user.email}`;
+                userList.appendChild(li);
+            });
+        };
+
+        // Menambahkan 2 data baru
+        store({ nama: "John", umur: 25, alamat: "Jakarta", email: "john@example.com" });
+        store({ nama: "Doe", umur: 28, alamat: "Surabaya", email: "doe@example.com" });
+
+        // Tampilkan data
+        renderUsers();
+    </script>
+</body>
+</html>
